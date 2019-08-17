@@ -67,6 +67,7 @@ const mutations = {
                 let a = domino.value[0]
                 domino.value[0] = domino.value[1]
                 domino.value[1] = a
+                console.log('SWAP LEFT!')
             }
             state.board.unshift(domino)
         } else {
@@ -74,6 +75,7 @@ const mutations = {
                 let b = domino.value[0]
                 domino.value[0] = domino.value[1]
                 domino.value[1] = b
+                console.log('SWAP RIGHT!')
             }
             state.board.push(domino)
         }
@@ -91,4 +93,5 @@ const mutations = {
         }
     }
 }
+
 export const store = new Vuex.Store({ state, getters, actions, mutations })
