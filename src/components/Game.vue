@@ -15,7 +15,6 @@
 </template>
 
 <script>
-
 import Board from './Board.vue'
 import ChangeHand from './ChangeHand.vue'
 export default {
