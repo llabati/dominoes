@@ -6,9 +6,7 @@
             </ul>
         </div>
         <div>
-
-            <button class="btn-play" @click="initGame">{{ name }}, launch the game</button>
-            
+            <button class="btn-play" @click="initGame">{{ name }}, launch the game</button>     
         </div>
     </div>
 </template>
