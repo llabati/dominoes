@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <!--<entry v-on:newPlayer="installPlayer(name)"></entry>-->
-    
     <game msg=", it's up to you!"/>
   </div>
 </template>
