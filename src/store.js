@@ -58,7 +58,11 @@ const mutations = {
         state.machineHand.push(state.shuffledPieces[0])
         state.shuffledPieces.shift()
         console.log(state.machineHand)
-        //console.log(store.shuffledPieces.length)
+    },
+    DRAW_ONE(state, player) {
+        if (player === 1) state.hand.push(state.shuffledPieces[0])
+        if (player === 0) state.machineHand.push(state.shuffledPieces[0])
+        state.shuffledPieces.shift()
     },
     ADD_TO_BOARD(state, domino){
         console.log('STORE DOMINO', domino)
@@ -93,6 +97,7 @@ const mutations = {
         }
     }
 }
+
 
 export const store = new Vuex.Store({ state, getters, actions, mutations })
 
