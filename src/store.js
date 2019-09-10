@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import _ from 'lodash'
+import utils from './services/utils'
 
 Vue.use(Vuex)
 
@@ -39,19 +40,26 @@ const state = {
     name: '',
     hand: [],
     machineHand: [],
-    board: []
+    board: [],
+    lock: [],
+    noChoice: false,
+    machineChoices: 0,
+    side:''
 }
 const getters = {}
 
 const actions = {}
 
 const mutations = {
-    SHUFFLE_PIECES(state){
-      state.shuffledPieces =  _.shuffle(state.sortedPieces)
-    },
+    // se souvenir du prénom du joueur
     GIVE_PLAYER_A_NAME(state, name){
         state.name = name
     },
+    //mélanger les dominos
+    SHUFFLE_PIECES(state){
+      state.shuffledPieces =  _.shuffle(state.sortedPieces)
+    },
+    // distribuer les dominos
     FULL_HAND(state){
         state.hand.push(state.shuffledPieces[0])
         state.shuffledPieces.shift()
@@ -59,26 +67,33 @@ const mutations = {
         state.shuffledPieces.shift()
         console.log(state.machineHand)
     },
+    // piocher
     DRAW_ONE(state, player) {
         if (player === 1) state.hand.push(state.shuffledPieces[0])
         if (player === 0) state.machineHand.push(state.shuffledPieces[0])
         state.shuffledPieces.shift()
+        console.log('STORE DRAWED!')
     },
+    NO_MORE_CHOICE(state){
+        state.noChoice = true
+    },
+    ACTUALIZE_MACHINECHOICES(state, choicesNum){
+        state.machineChoices = choicesNum
+    },
+    // jouer un domino
     ADD_TO_BOARD(state, domino){
         console.log('STORE DOMINO', domino)
         if (domino.place === 'left') {
             if (domino.next !== domino.head) {
-                let a = domino.value[0]
-                domino.value[0] = domino.value[1]
-                domino.value[1] = a
+                utils.swap(domino.value)
+                state.side = 'left'
                 console.log('SWAP LEFT!')
             }
             state.board.unshift(domino)
         } else {
             if (domino.prev !== domino.tail){
-                let b = domino.value[0]
-                domino.value[0] = domino.value[1]
-                domino.value[1] = b
+                utils.swap(domino.value)
+                state.side = 'right'
                 console.log('SWAP RIGHT!')
             }
             state.board.push(domino)
@@ -95,9 +110,14 @@ const mutations = {
             console.log('DOMO MACHINE', domoM, indexM)
             state.machineHand.splice(indexM, 1)
         }
+    },
+    // noter les "trous" dans le jeu du joueur humain
+    ADD_TO_LOCK(state, newLock) {
+        state.lock.push(...newLock)
+        let newSetLock = new Set(state.lock)
+        state.lock = [ ...newSetLock ]
+
     }
 }
 
-
 export const store = new Vuex.Store({ state, getters, actions, mutations })
-
