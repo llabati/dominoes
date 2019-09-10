@@ -4,9 +4,10 @@ export default {
         return randomDraw
     },
     
-    swap: function(randValue){
-        let t = randValue[0]
-        randValue[0] = randValue[1]
-        randValue[1] = t
+    // inverse la gauche et la droite du domino
+    swap: function(doubleValue){
+        let t = doubleValue[0]
+        doubleValue[0] = doubleValue[1]
+        doubleValue[1] = t
     }
 }
