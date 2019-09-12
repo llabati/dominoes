@@ -457,7 +457,4 @@ export default {
 .active-domino {
     cursor: pointer;
 }
-
-
-
 </style>
