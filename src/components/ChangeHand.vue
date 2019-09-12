@@ -1,48 +1,12 @@
 /* eslint-disable */
 <template>
     <div>
-        <div class="center" style="height: 400px; background-color: green; border: solid 5px brown;">
+        <div class="hand-board">
             <ul v-if="playerCanPlay" class="flex-list">
                 <li v-for="domino in hand" :key="domino.id" class="game-item" @contextmenu="chooseDomino(domino, 'right')" @click="chooseDomino(domino, 'left')">
-                    <div class="dominoe">
-                        <div class="dom-flex">
-                        <div class="semidom">
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[0] === 4 || domino.value[0] === 5 || domino.value[0] === 6"></div>
-                                <div class="dot" v-show="domino.value[0] === 6"></div>
-                                <div class="dot" v-show="domino.value[0] === 2 || domino.value[0] === 3 || domino.value[0] === 4 || domino.value[0] === 5 || domino.value[0] === 6"></div>
-                            </div>
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[0] === 7"></div>
-                                <div class="dot" v-show="domino.value[0] === 1 || domino.value[0] === 3 || domino.value[0] === 5"></div>
-                                <div class="dot" v-show="domino.value[0] === 7"></div>
-                            </div>
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[0] === 2 || domino.value[0] === 3 || domino.value[0] === 4 || domino.value[0] === 5 || domino.value[0] === 6"></div>
-                                <div class="dot" v-show="domino.value[0] === 6"></div>
-                                <div class="dot" v-show="domino.value[0] === 4 || domino.value[0] === 5 || domino.value[0] === 6"></div>
-                            </div>
-
-                        </div>
-                        <div class="sep-vertical"></div>
-                        <div class="semidom">
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[1] === 4 || domino.value[1] === 5 || domino.value[1] === 6"></div>
-                                <div class="dot" v-show="domino.value[1] === 6"></div>
-                                <div class="dot" v-show="domino.value[1] === 2 || domino.value[1] === 3 || domino.value[1] === 4 || domino.value[1] === 5 || domino.value[1] === 6"></div>
-                            </div>
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[1] === 7"></div>
-                                <div class="dot" v-show="domino.value[1] === 1 || domino.value[1] === 3 || domino.value[1] === 5"></div>
-                                <div class="dot" v-show="domino.value[1] === 7"></div>
-                            </div>
-                            <div class="three-dots">
-                                <div class="dot" v-show="domino.value[1] === 2 || domino.value[1] === 3 || domino.value[1] === 4 || domino.value[1] === 5 || domino.value[1] === 6"></div>
-                                <div class="dot" v-show="domino.value[1] === 6"></div>
-                                <div class="dot" v-show="domino.value[1] === 4 || domino.value[1] === 5 || domino.value[1] === 6"></div>
-                            </div>
-                        </div>
-                        </div>
+                    <div class="active-domino"> 
+                        <half-domino :value="domino.value[0]"></half-domino>
+                        <half-domino :value="domino.value[1]"></half-domino>
                     </div>
                 </li> 
             </ul> 
@@ -65,12 +29,16 @@
 <script>
 /* eslint-disable */
 import { store } from '../store.js'
+import HalfDomino from './HalfDomino.vue'
 
 export default {
     props: {
         name: String
     },
     store,
+    components: {
+        HalfDomino
+    },
     data(){
         return {
             intro: 'The clicked domino automatically places itself on the game mat. If you can place it either on the left or on the right, the left click sends it on the left, and the right click sends it on the right.',
@@ -106,6 +74,8 @@ export default {
                     this.playerCanPlay = false
                     this.neitherWins = true
                     this.claimVictory()
+                    this.start = true
+                    this.draw = true
                 }
             }
         },
@@ -115,6 +85,8 @@ export default {
                 this.continue = false
                 this.playerWins = true
                 this.claimVictory()
+                this.start = true
+                this.draw = true
             }
         },
         // main de la machine
@@ -124,6 +96,8 @@ export default {
                 this.playerCanPlay = false
                 this.machineWins = true
                 this.claimVictory()
+                this.start = true
+                this.draw = true
             }
         },
         // quand le joueur est coincé... mémorise les valeurs qu'il n'a pas dans son jeu
@@ -143,6 +117,8 @@ export default {
                 this.playerCanPlay = false
                 this.neitherWins = true
                 this.claimVictory()
+                this.start = true
+                this.draw = true
             }
             this.upto = !this.upto
         }
@@ -443,6 +419,14 @@ export default {
 </script>
 
 <style>
+.hand-board {
+    background-color: green; 
+    border: solid 5px brown;
+    width: 100%; 
+    margin: 10px auto; 
+    background-color: green; 
+    padding: 10px;
+}
 .explanation {
     width: 50%; 
     border : solid 1px white;
@@ -466,11 +450,11 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     align-content: center;
 }
-.dominoe {
+.active-domino {
     cursor: pointer;
 }
 
