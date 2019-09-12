@@ -9,12 +9,14 @@
     <div class="center">
       <board></board>
     </div>
-    
-    <change-hand :name="name"></change-hand>
+    <div class="center">
+      <change-hand :name="name"></change-hand>
+    </div>
   </div>
 </template>
 
 <script>
+
 import Board from './Board.vue'
 import ChangeHand from './ChangeHand.vue'
 export default {
