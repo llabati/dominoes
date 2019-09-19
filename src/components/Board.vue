@@ -2,12 +2,14 @@
 <div>
     <div>
         <div class="board">   
-            <ul class="flex-board">
-                <li v-for="dom in board" :key="dom.id" class="board-item">
-                    <half-domino :value="dom.value[0]"></half-domino>
-                    <half-domino :value="dom.value[1]"></half-domino>
-                </li>
-            </ul>              
+            <ul>
+                <draggable class="flex-board" v-model="board" group="dominoes">
+                    <li v-for="dom in board" :key="dom.id" class="board-item">
+                            <half-domino :value="dom.value[0]"></half-domino>
+                            <half-domino :value="dom.value[1]"></half-domino>
+                    </li>
+                </draggable>
+            </ul>            
         </div>
     </div>
 
@@ -18,26 +20,25 @@
 <script>
 import { store } from '../store.js'
 import HalfDomino from './HalfDomino.vue'
+import draggable from 'vuedraggable'
 export default {
     store,
     computed: {
-        board(){
-            return this.$store.state.board
+        board: {
+            get(){
+                return this.$store.state.board
+            },
+            set(value){
+                this.$store.dispatch('saveBoard', value)
+            }
         },
         len() {
             return this.board.length
         },
-        list(){
-            return document.querySelector('#board')
-        },
-        limDisplayLeft(){
-            return this.board[0]
-        },
-        limDisplayRight(){
-            return this.board[this.boardc.length - 1]
-        }
+        
     },
     components: {
+        draggable,
         HalfDomino
     }
     
@@ -48,6 +49,7 @@ export default {
 <style>
 .board {
     width: 100%; 
+    min-height: 400px;
     margin: 10px auto; 
     background-color: green; 
     padding: 10px;
@@ -60,20 +62,22 @@ export default {
     align-items: center;
     align-content: center;
 }
+.board-draggable {
+    height: 100%;
+    width: 100%;
+}
 .board-item {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 5px;
+    margin: 15px 2px;
 }
 
 .game-item {
     display: inline-block;
     width: 10%;
     padding: 1%;
-    /*background-color: beige;*/
-    /*border: solid 1px black;
-    border-radius: 3px;*/
+    margin: 15px 5px;
 }
 .dom-flex {
     display: flex;
@@ -82,5 +86,19 @@ export default {
     height: 85%;
     margin: 10px;
 }
+.board-enter {
+    opacity: 0;
+    /*transform: translateY(30px);*/
+}
+.board-enter-active {
+    transition: opacity 2s;
+}
+.flex-board li:last-child {
+    /*border: solid 2px red;*/
+    box-shadow: 1px 1px 1px 1px red;
+}
+.flex-board li:first-child {
+    box-shadow: -1px -1px 1px 1px red;
+} 
 
 </style>
