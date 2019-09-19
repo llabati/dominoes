@@ -40,10 +40,7 @@ export default {
 }
 .row-in-domino {
     height: 24px;
-    /*display: flex;
-    flex-direction:row;*/
     padding: 2px;
-    /*justify-content: space-around;*/
 }
 .surdot {
     display: inline-block;
