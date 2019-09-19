@@ -1,5 +1,5 @@
 <template>
-  <div class="play">
+  <div class="play" ref="play" style="width: 100%;">
     <div id="intro" class="col-6 offset-3">
     <label for="name" class="lead">Give us your first name or your nickname</label>
     <input type="text" name="name" v-model="name" @blur="hide">
@@ -10,7 +10,7 @@
       <board></board>
     </div>
     <div class="center">
-      <change-hand :name="name"></change-hand>
+      <playing-zone :name="name"></playing-zone>
     </div>
   </div>
 </template>
@@ -18,7 +18,8 @@
 <script>
 
 import Board from './Board.vue'
-import ChangeHand from './ChangeHand.vue'
+import PlayingZone from './PlayingZone.vue'
+import vuedraggable from 'vuedraggable'
 export default {
   
   props: {
@@ -41,10 +42,14 @@ export default {
       intro.style.display="none"
     }
   },
+  mounted(){
+    console.log('REF', this.$refs)
+  },
 
   components: {
     Board,
-    ChangeHand,
+    PlayingZone,
+    vuedraggable
   },
 };
 </script>
