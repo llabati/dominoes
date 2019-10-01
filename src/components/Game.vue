@@ -1,9 +1,6 @@
 <template>
   <div class="play" ref="play" style="width: 100%;">
-    <div id="intro" class="col-6 offset-3">
-    <label for="name" class="lead">Give us your first name or your nickname</label>
-    <input type="text" name="name" v-model="name" @blur="hide">
-  </div>
+    <entry v-on:newName="nameThisPlayer"></entry>
 
     <h1 style="color: green;">{{ welcome }}</h1>
     <div class="center">
@@ -16,7 +13,7 @@
 </template>
 
 <script>
-
+import Entry from './Entry.vue'
 import Board from './Board.vue'
 import PlayingZone from './PlayingZone.vue'
 import vuedraggable from 'vuedraggable'
@@ -40,6 +37,9 @@ export default {
     hide(){
       let intro = document.querySelector('#intro')
       intro.style.display="none"
+    },
+    nameThisPlayer(name){
+      this.name = name
     }
   },
   mounted(){
@@ -47,6 +47,7 @@ export default {
   },
 
   components: {
+    Entry,
     Board,
     PlayingZone,
     vuedraggable
