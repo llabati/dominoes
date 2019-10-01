@@ -71,13 +71,15 @@ export default {
     flex-direction: row;
     justify-content: center;
     margin: 15px 2px;
+    box-shadow: 1px 1px 1px 1px black;
 }
 
 .game-item {
     display: inline-block;
-    width: 10%;
-    padding: 1%;
+    padding: 0;
     margin: 15px 5px;
+    box-shadow: 1px 1px 1px 1px black;
+    cursor: pointer;
 }
 .dom-flex {
     display: flex;
