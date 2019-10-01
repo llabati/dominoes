@@ -5,10 +5,8 @@
             <ul v-if="keepPlaying" class="flex-list">
                 <draggable style="width: 100%;" v-model="hand" group="dominoes">
                 <li v-for="domino in hand" :key="domino.id" class="game-item" @dragstart="getPosition" @drop="toMachine(domino)" @click="chooseDomino(domino, 'left')">
-                    <div class="active-domino"> 
                         <half-domino :value="domino.value[0]"></half-domino>
                         <half-domino :value="domino.value[1]"></half-domino>
-                    </div>
                 </li> 
                 </draggable>
             </ul> 
@@ -256,6 +254,7 @@ export default {
                 if (this.wrong === true) return
                 else{
                     // lorsqu'on a un domino qui peut être placé à gauche ou à droite
+                    //if ((domino.prev === tail && domino.next === head) || (domino.prev === head && domino.next === tail)) {
                     if ((domino.value[0] === tail && domino.value[1] === head) || (domino.value[0] === head && domino.value[1] === tail)) {
                         domino.place = side   
                         if (domino.place === "left") {
@@ -491,6 +490,7 @@ export default {
     align-content: center;
 }
 .active-domino {
+    padding: 0;
     cursor: pointer;
 }
 .fade-leave-active {
