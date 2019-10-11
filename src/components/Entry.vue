@@ -1,11 +1,11 @@
 <template>
-
 <div :class="{ intro : show, hidden: !show }">
     <label for="name" class="lead">Please tell us your first name</label>
-    <input type="text" name="name" ref="name" v-focus v-model="name">
-    <button class="btn-name" @click="close">Envoyer</button>
-  </div>
-    
+    <form class="input-zone">
+        <input type="text" class="input-name" name="name" ref="name" v-focus v-model="name">
+        <button class="btn-name" @click="close">Envoyer</button>
+    </form>
+  </div> 
 </template>
 
 <script>
@@ -21,13 +21,10 @@ export default {
     methods: {
         named(){
             },
-        close(){
-            console.log(this.name)
+        close(e){
+            e.preventDefault()
             this.$emit('newName', this.name)
-            //this.$store.commit('GIVE_PLAYER_A_NAME', this.name)
-            console.log('HIDE!!!', this.hide)
-            this.show = false,
-            console.log('AND NOW...', this.show, this.hide)
+            this.show = false
         }
     },
     directives: {
@@ -46,25 +43,70 @@ export default {
     margin: 20px auto;
     padding: 15px;
     border: solid 3px white;
-    box-shadow: 5px 5px 5px 5px black;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, .3);
     z-index: 10;
     background-color: brown;
     color: white;
+    animation: GetVisible 3s ease;
 }
-input {
-    display: block;
+.input-zone {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 80%;
+    background-color: white;
     border: solid 2px red;
     margin: 10px auto;
 }
+.input-name {  
+    width: 66%;
+    margin: 0;
+    border: 1px;
+    height: 100%;
+    font-size: 20px;
+}
 .btn-name {
-    padding: 10px;
+    display: inline-block;
+    width: 33%;
+    margin: 0;
+    padding: 2px 10px;
     border-radius: 5px;
-    box-shadow: 2px 2px 2px 2px black;
-    color: brown;
-    font-weight: 800;
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, .3);
+    background-color: green;
+    color: white;
+    font-weight: 400;
+    text-transform: uppercase;
+    cursor: pointer;
 }
 .hidden {
     display: none;
+}
+@keyframes GetVisible {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes GetInvisible {
+    0% {
+        /*transform: scale(1);*/
+        opacity: 1;
+        z-index: 10;
+    }
+    /*20% {
+        transform: scale(1.4);
+        opacity: 0.9;
+    }*/
+    100% {
+        /*transform: scale(0);*/
+        opacity: 0;
+        z-index: -5;
+    }
 }
 
 
