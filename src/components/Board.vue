@@ -73,6 +73,12 @@ export default {
     margin: 15px 2px;
     box-shadow: 1px 1px 1px 1px black;
 }
+.board-item:first-child {
+    animation: enterTheBoardLeft 1s;
+}
+.board-item:last-child {
+    animation: enterTheBoardRight 1s;
+}
 
 .game-item {
     display: inline-block;
@@ -80,6 +86,7 @@ export default {
     margin: 15px 5px;
     box-shadow: 1px 1px 1px 1px black;
     cursor: pointer;
+    animation: enterTheHand 1s;
 }
 .dom-flex {
     display: flex;
@@ -102,5 +109,35 @@ export default {
 .flex-board li:first-child {
     box-shadow: -1px -1px 1px 1px red;
 } 
+.add-enter {
+    opacity: 0;
+
+}
+.add-enter-active {
+    transition: all 1s ease;
+}
+.add-enter-to {
+    opacity: 1;
+}
+@keyframes enterTheBoardRight {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+@keyframes enterTheBoardLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 
 </style>
