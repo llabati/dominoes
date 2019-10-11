@@ -83,10 +83,6 @@ const actions = {
 }
 
 const mutations = {
-    // se souvenir du prénom du joueur
-    GIVE_PLAYER_A_NAME(state, name){
-        state.name = name
-    },
     //mélanger les dominos
     SHUFFLE_PIECES(state){
       state.shuffledPieces =  _.shuffle(state.sortedPieces)
