@@ -37,7 +37,6 @@ const state = {
         { value: [6, 6] } 
     ],
     shuffledPieces: [],
-    name: '',
     hand: [],
     machineHand: [],
     board: [],
