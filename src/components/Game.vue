@@ -2,12 +2,11 @@
   <div class="play" ref="play" style="width: 100%;">
     <entry v-on:newName="nameThisPlayer"></entry>
 
-    <h1 style="color: green;">{{ welcome }}</h1>
     <div class="center">
       <board></board>
     </div>
     <div class="center">
-      <playing-zone :name="name"></playing-zone>
+      <playing-zone :name="name" :display="display"></playing-zone>
     </div>
   </div>
 </template>
@@ -18,32 +17,17 @@ import Board from './Board.vue'
 import PlayingZone from './PlayingZone.vue'
 import vuedraggable from 'vuedraggable'
 export default {
-  
-  props: {
-    msg: String,
-    //name: String
-  },
   data(){
     return {
-      name: 'Dear player'
-    }
-  },
-  computed: {
-    welcome(){
-      return this.name + this.msg
+      name: 'Dear player',
+      display: false
     }
   },
   methods: {
-    hide(){
-      let intro = document.querySelector('#intro')
-      intro.style.display="none"
-    },
     nameThisPlayer(name){
       this.name = name
+      this.display = true
     }
-  },
-  mounted(){
-    console.log('REF', this.$refs)
   },
 
   components: {
