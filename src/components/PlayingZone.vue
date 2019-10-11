@@ -5,8 +5,10 @@
             <ul v-if="keepPlaying" class="flex-list">
                 <draggable style="width: 100%;" v-model="hand" group="dominoes">
                 <li v-for="domino in hand" :key="domino.id" class="game-item" @dragstart="getPosition" @drop="toMachine(domino)" @click="chooseDomino(domino, 'left')">
+                    <!--<div class="active-domino"> -->
                         <half-domino :value="domino.value[0]"></half-domino>
                         <half-domino :value="domino.value[1]"></half-domino>
+                    <!--</div> -->
                 </li> 
                 </draggable>
             </ul> 
@@ -16,10 +18,10 @@
                 <p style="color: white;" v-if="wrong"><strong>{{ name }}, you cannot put this piece on the mat! Choose another one, or draw...</strong></p>
             </div>
         </div>
-        <div>
+      <div v-if="display" class="commands">
 
             <button v-if="start" class="btn-play" ref="start" @click="initGame">{{ name }}, launch the game</button>
-            <transition name="fade" mode="in-out"><button v-if="draw" class="btn-play" style="background-color: red;" ref="draw" @click="drawAgain(1)">Draw</button></transition>
+            <transition name="fade" mode="in-out"><button v-if="draw" class="btn-play" style="background-color: brown;" ref="draw" @click="drawAgain(1)">Draw</button></transition>
             <transition name="end"><button v-if="!draw" class="btn-play" style="background-color: yellow; color: black;" ref="pass" @click="pass=!pass">Pass</button></transition>
         </div>   
 
@@ -36,7 +38,8 @@ import draggable from 'vuedraggable'
 
 export default {
     props: {
-        name: String
+        name: String,
+        display: Boolean
     },
     store,
     components: {
@@ -445,9 +448,6 @@ export default {
             this.stopDrawing = false
             this.pass = false
         }
-    },
-    mounted(){
-        console.log(this.$refs)
     }
     
 }
@@ -472,13 +472,15 @@ export default {
     font-size: 18px;
 }
 .btn-play {
-    margin: 10px auto;
+    margin: 10px;
     padding: 1%;
     background-color: green;
     color: white;
     font-size: 2rem;
     font-weight: 800;
     border-radius: 5%;
+    border: solid 1px red;
+    box-shadow: 2px 5px 5px rgba(0, 0, 0, .3);
 }
 
 .flex-list {
@@ -492,6 +494,9 @@ export default {
 .active-domino {
     padding: 0;
     cursor: pointer;
+}
+.commands {
+    animation: GetVisible 2s ease;
 }
 .fade-leave-active {
     transition: opacity 2s ease;
@@ -510,6 +515,16 @@ export default {
 .end-enter-to {
     opacity: 1;
     transform: translateX(0px)
+}
+@keyframes enterTheHand {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 
