@@ -3,14 +3,14 @@
     <div>
         <div class="hand-board">
             <ul v-if="keepPlaying" class="flex-list">
-                <draggable style="width: 100%;" v-model="hand" group="dominoes">
-                <li v-for="domino in hand" :key="domino.id" class="game-item" @dragstart="getPosition" @drop="toMachine(domino)" @click="chooseDomino(domino, 'left')">
+                <!--<draggable style="width: 100%;" v-model="hand" group="dominoes"> -->
+                <li v-for="domino in hand" :key="domino.id" class="game-item">
                     <!--<div class="active-domino"> -->
-                        <half-domino :value="domino.value[0]"></half-domino>
-                        <half-domino :value="domino.value[1]"></half-domino>
+                        <half-domino :value="domino.value[0]" v-on:chosen="chooseDomino(domino, 'left')"></half-domino>
+                        <half-domino :value="domino.value[1]" v-on:chosen="chooseDomino(domino, 'right')"></half-domino>
                     <!--</div> -->
                 </li> 
-                </draggable>
+                <!--</draggable>-->
             </ul> 
             <p style="color: white; font-size: 24px;" v-if="playerWins || machineWins || neitherWins"><strong>{{ claimVictory() }}</strong></p>
             <p class="explanation" v-else>{{ intro }}</p>
@@ -48,7 +48,7 @@ export default {
     },
     data(){
         return {
-            intro: 'The clicked domino automatically places itself on the game mat. If you can place it either on the left or on the right, the left click sends it on the left, and the right click sends it on the right.',
+            intro: 'The clicked domino automatically places itself on the game mat. If you can place it either on the left or on the right, clicking on top sends it on the left, clicking on bottom sends it on the right.',
             upto: false,
             tour: 0,
             start: true,
