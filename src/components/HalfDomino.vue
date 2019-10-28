@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .half-domino {
     width: 80px;
     height: 80px;
