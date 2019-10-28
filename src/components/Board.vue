@@ -2,13 +2,11 @@
 <div>
     <div>
         <div class="board">   
-            <ul>
-                <draggable class="flex-board" v-model="board" group="dominoes">
+            <ul class="flex-board">
                     <li v-for="dom in board" :key="dom.id" class="board-item">
                             <half-domino :value="dom.value[0]"></half-domino>
                             <half-domino :value="dom.value[1]"></half-domino>
                     </li>
-                </draggable>
             </ul>            
         </div>
     </div>
@@ -20,7 +18,6 @@
 <script>
 import { store } from '../store.js'
 import HalfDomino from './HalfDomino.vue'
-import draggable from 'vuedraggable'
 export default {
     store,
     computed: {
@@ -38,7 +35,6 @@ export default {
         
     },
     components: {
-        draggable,
         HalfDomino
     }
     
@@ -94,14 +90,7 @@ export default {
     align-items: center;
     height: 85%;
     margin: 10px;
-}
-.board-enter {
-    opacity: 0;
-    /*transform: translateY(30px);*/
-}
-.board-enter-active {
-    transition: opacity 2s;
-}
+} 
 .flex-board li:last-child {
     /*border: solid 2px red;*/
     box-shadow: 1px 1px 1px 1px red;
@@ -109,16 +98,7 @@ export default {
 .flex-board li:first-child {
     box-shadow: -1px -1px 1px 1px red;
 } 
-.add-enter {
-    opacity: 0;
 
-}
-.add-enter-active {
-    transition: all 1s ease;
-}
-.add-enter-to {
-    opacity: 1;
-}
 @keyframes enterTheBoardRight {
     from {
         opacity: 0;
