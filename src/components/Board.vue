@@ -18,6 +18,7 @@
 <script>
 import { store } from '../store.js'
 import HalfDomino from './HalfDomino.vue'
+
 export default {
     store,
     computed: {
@@ -35,6 +36,7 @@ export default {
         
     },
     components: {
+
         HalfDomino
     }
     
@@ -76,14 +78,6 @@ export default {
     animation: enterTheBoardRight 1s;
 }
 
-.game-item {
-    display: inline-block;
-    padding: 0;
-    margin: 15px 5px;
-    box-shadow: 1px 1px 1px 1px black;
-    cursor: pointer;
-    animation: enterTheHand 1s;
-}
 .dom-flex {
     display: flex;
     flex-direction: row;
@@ -92,7 +86,6 @@ export default {
     margin: 10px;
 } 
 .flex-board li:last-child {
-    /*border: solid 2px red;*/
     box-shadow: 1px 1px 1px 1px red;
 }
 .flex-board li:first-child {
