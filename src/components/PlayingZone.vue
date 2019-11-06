@@ -34,7 +34,8 @@
 import { store } from '../store.js'
 import HalfDomino from './HalfDomino.vue'
 import utils from '../services/utils.js'
-import draggable from 'vuedraggable'
+import calculations from '../services/calculations.js'
+//import draggable from 'vuedraggable'
 
 export default {
     props: {
@@ -44,11 +45,10 @@ export default {
     store,
     components: {
         HalfDomino,
-        draggable
     },
     data(){
         return {
-            intro: 'The clicked domino automatically places itself on the game mat. If you can place it either on the left or on the right, clicking on top sends it on the left, clicking on bottom sends it on the right.',
+            intro: 'The clicked domino automatically places itself on the game mat. If you can place it either on the left or on the right, clicking on top sends it to the left, clicking on bottom sends it to the right.',
             upto: false,
             tour: 0,
             start: true,
@@ -148,16 +148,7 @@ export default {
 
     methods: {
 
-        // désigne la valeur gauche du domino placé à l'extrémité gauche du tapis de jeu
-        calculateHead: function(){
-            let head = this.$store.state.board[0].value[0]
-            return head
-        },
-        // désigne la valeur droite du domino placé à l'extrémité droite du tapis
-        calculateTail: function(){
-            let tail = this.$store.state.board[this.$store.state.board.length-1].value[1]  
-            return tail
-        },
+        
         // empêche la mise par le joueur sur le tapis de jeu d'un domino inadéquat
         warningWrongDomino: function(domino, head, tail) {
             if(domino.value[0] !== head && domino.value[0] !== tail && domino.value[1] !== head && domino.value[1] !== tail) {
@@ -167,34 +158,7 @@ export default {
             }
 
         },
-        // détermine le meilleur domino à jouer (nombre de points le plus élevé), parmi les choix possibles
-        // favorise le choix des doubles
-        calculateBestChoice: function(machineChoices){
-            console.log('MACHINECHOICES ENTERING CALCULEBEST CHOICE', machineChoices)
-                let computedChoices = machineChoices.map(e => [ e.value[0], e.value[1], e.value[0] + e.value[1] ])
-                    console.log('COMPUTEDCHOICES', computedChoices)
-                
-                let finalChoices = (computedChoices.find( e => e[0] === e[1])) ? computedChoices.filter(a => a[0] === a[1]).sort((a,b) => b[2] - a[2]) : computedChoices.sort((a,b) => b[2] - a[2])
-                console.log('FINAL CHOICES', finalChoices)
-
-                let final = finalChoices[0]
-                console.log('FINAL CHOICE', final)
-                this.double = false
-                return final
-        },
-        // prépare le bon placement du domino choisi en définissant la "tête" (à gauche) ou la "queue" (à droite)
-        positionningTheChosenDomino: function(piece, head, tail){
-            //piece.place = (piece.next === head || piece.prev === head) ? "left" : "right"
-            piece.place = (piece.value[0] === head || piece.value[1] === head) ? "left" : "right"
-            console.log('DOMINO HAS ITS PLACE', piece.place)
-            if (piece.place === "left") {
-                piece.tail = undefined
-                piece.head = head
-            } else {
-                piece.head = undefined
-                piece.tail = tail
-            }
-        },
+        
         //distribue 6 dominos à chaque joueur (joueur et machine)
         initGame: function(){
             if (this.$store.state.board.length > 0) {
@@ -249,8 +213,10 @@ export default {
             }
             // en cours de partie
             if (this.tour > 0) {
-                let head = this.calculateHead()
-                let tail = this.calculateTail()
+                let head = calculations.calculateHead()
+                let tail = calculations.calculateTail()
+                //let head = this.calculateHead()
+                //let tail = this.calculateTail()
                 console.log('HEAD AND TAIL PLAYER', domino, head, tail)
                 // vérification que le domino choisi est bon
                 this.warningWrongDomino(domino, head, tail)
@@ -269,7 +235,7 @@ export default {
                         }
                     }
                     else {
-                        this.positionningTheChosenDomino(domino, head, tail)
+                        calculations.positionningTheChosenDomino(domino, head, tail)
                     }
                 }
 
@@ -286,8 +252,10 @@ export default {
         },
         toMachine(domino, begin){
             console.log('DOMINO DRAGGED', domino)
-            let head = this.calculateHead()
-            let tail = this.calculateTail()
+            let head = calculations.calculateHead()
+            let tail = calculations.calculateTail()
+            //let head = this.calculateHead()
+            //let tail = this.calculateTail()
             let end = event.clientX
             console.log('THE END', end)
             domino.place = begin > end ? "left" : "right"
@@ -317,8 +285,10 @@ export default {
                 if (this.$store.state.board.length > 0){
                     // détermination des choix possibles pour la machine
                     let choices = []
-                    let head = this.calculateHead()
-                    let tail = this.calculateTail()
+                    let head = calculations.calculateHead()
+                    let tail = calculations.calculateTail()
+                    //let head = this.calculateHead()
+                    //let tail = this.calculateTail()
                     console.log('HEAD AND TAIL', head, tail)
                     
                     let one = this.$store.state.machineHand.filter(d => d.value[0] === head)
@@ -375,7 +345,7 @@ export default {
             // this.empty = quand le joueur ne dispose manifestement pas de certaines valeurs...
             // ne pas jouer sur ces valeurs est un moyen de bloquer le joueur
             if (this.empty === true){
-                let lockChoices = this.lockPlayer(machineChoices, head, tail)
+                let lockChoices = calculations.lockPlayer(machineChoices, head, tail)
                 console.log('LOCKCHOICES in MAKECHOICE', lockChoices)
                 if (lockChoices.length < machineChoices.length) {
                     for (let val of lockChoices){
@@ -389,46 +359,24 @@ export default {
                     }
                 }
             // calcul du domino le plus élevé en points, dont il faut se débarrasser en premier     
-            let final = this.calculateBestChoice(machineChoices) 
+            let final = calculations.calculateBestChoice(machineChoices) 
             
             let piece = this.$store.state.machineHand.find(p => p.value[0] === final[0] && p.value[1] === final[1])
             console.log("PIECE TO PLAY", piece, head, tail)
             piece.player = false
-            this.positionningTheChosenDomino(piece, head, tail)
+            calculations.positionningTheChosenDomino(piece, head, tail)
             
             this.$store.dispatch('addToBoard', piece)   
         },
-        // déterminer les possibilités que la machine a de bloquer le joueur et de le forcer à piocher
-        lockPlayer(machineChoices, head, tail){
-            console.log('MACHINECHOICES in LOCKPLAYER', machineChoices)
-            let lockChoices = []
-            let lockHead = machineChoices.filter (d => d.value[0] === head || d.value[1] === head)
-            let lockTail = machineChoices.filter (d => d.value[0] === tail || d.value[1] === tail)
-            lockChoices = [ ...lockHead, ...lockTail ]
-            console.log('LOCKCHOICES', lockChoices)
-            return lockChoices
-        },
-        //calculer le score final
-        calculateScores(){
-            if (this.neitherWins) {
-                let playerTotal = utils.setScores(this.hand)
-                let machineTotal = utils.setScores(this.machineHand)
-                return playerTotal - machineTotal 
-            }
-            if (this.playerWins) {
-                return utils.setScores(this.machineHand)
-            }
-            if (this.machineWins){
-                return utils.setScores(this.hand)
-            }
-        },
+        
         // afficher le résultat de la partie
         claimVictory(){
-            let finalTotal = this.calculateScores()
+            let results = { neitherWins: this.neitherWins, playerWins: this.playerWins, machineWins: this.machineWins, player: this.hand, machine: this.machineHand }
+            let finalTotal = utils.calculateScores(results)
            
             if (this.neitherWins) {
-                if (finalTotal < 0) return 'Both players are stuck, but machine wins by ' + Math.abs(finalTotal) + " points"
-                if (finalTotal > 0) return 'Both players are stuck, but you, '+ this.name + ', wins by ' + finalTotal + " points"
+                if (finalTotal > 0) return 'Both players are stuck, but machine wins by ' + finalTotal + " points"
+                if (finalTotal < 0) return 'Both players are stuck, but you, '+ this.name + ', wins by ' + Math.abs(finalTotal) + " points"
                 if (finalTotal === 0) return 'Both players are stuck'
             }
             if (this.playerWins) return "Hey, "+ this.name + ", you have won by " + finalTotal + " points!"
@@ -494,6 +442,14 @@ export default {
 .active-domino {
     padding: 0;
     cursor: pointer;
+}
+.game-item {
+    display: inline-block;
+    padding: 0;
+    margin: 15px 5px;
+    box-shadow: 1px 1px 1px 1px black;
+    cursor: pointer;
+    animation: enterTheHand 1s;
 }
 .commands {
     animation: GetVisible 2s ease;
